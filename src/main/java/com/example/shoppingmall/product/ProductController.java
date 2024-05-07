@@ -2,16 +2,15 @@ package com.example.shoppingmall.product;
 
 import com.example.shoppingmall.utility.ValidationUtil;
 import com.example.shoppingmall.utility.Validator;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@AllArgsConstructor
 public class ProductController {
 
     ProductService productService;
-    ProductController(ProductService productService) {
-        this.productService = productService;
-    }
 
     @PostMapping("/products")
     public void registerProduct(@RequestBody Product product) {
