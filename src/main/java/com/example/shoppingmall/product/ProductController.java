@@ -1,6 +1,5 @@
 package com.example.shoppingmall.product;
 
-import com.example.shoppingmall.utility.ValidationUtil;
 import com.example.shoppingmall.utility.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +27,16 @@ public class ProductController {
         if (Validator.isNumber(product.getPrice())) {
             System.out.println("price는 잘 들어왔다");
         }
+    }
+
+    @GetMapping("/products/{id}")
+    public Product findProduct(@PathVariable int id) {
+        // 1. Product 반환 필드 : id가 없어요
+        // 2. id 숫자만 들어온 거 맞는지 유효성 검사
+
+        if (Validator.isNumber(id)) {
+            System.out.println("id는 잘 들어왔다");
+        }
+        return productService.findProduct(id);
     }
 }
