@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Customize ###
+/src/main/java/com/example/shoppingmall/exercise
+.DS_Store
