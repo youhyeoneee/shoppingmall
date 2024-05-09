@@ -2,9 +2,13 @@ package com.example.shoppingmall.product;
 
 import com.example.shoppingmall.utility.Validator;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 public class ProductController {
@@ -12,31 +16,46 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("/products")
-    public void registerProduct(@RequestBody Product product) {
-        productService.registerProduct(product);
-        System.out.println(
-                "/products : controller - " + product.getName()
-        );
+    public ResponseEntity registerProduct(@RequestBody Product product) {
 
-        // * 유효성 검사 : name(영어), price(숫자), description
-        // 1) 조건문
-        if (Validator.isAlpha(product.getName())) {
-            System.out.println("name은 잘 들어왔다.");
-        }
+        if (Validator.isAlpha(product.getName()) && Validator.isNumber(product.getPrice())) {
 
-        if (Validator.isNumber(product.getPrice())) {
-            System.out.println("price는 잘 들어왔다");
-        }
+            System.out.println(
+                    "/products : controller - " + product.getName()
+            );
+
+            Product savedProduct = productService.registerProduct(product);
+
+            try {
+                System.out.println(savedProduct.getName());
+            } catch (NullPointerException e) {
+                System.out.println(e.toString());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/products/{id}")
-    public Product findProduct(@PathVariable int id) {
+    public ResponseEntity<Product> findProduct(@PathVariable("id") int id) {
         // 1. Product 반환 필드 : id가 없어요
         // 2. id 숫자만 들어온 거 맞는지 유효성 검사
 
-        if (Validator.isNumber(id)) {
-            System.out.println("id는 잘 들어왔다");
+//        Logger logger = (Logger) LoggerFactory.getLogger(ProductController.class);
+        if (!Validator.isNumber(id)) {
+            // TODO log INFO 레벨 id type
+            log.info(id + " haha");
+            log.trace("id {}", "haha");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return productService.findProduct(id);
+
+        Product resultProduct =  productService.findProduct(id);
+
+        if (resultProduct == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(resultProduct, HttpStatus.OK);
     }
 }

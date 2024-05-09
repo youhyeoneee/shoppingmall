@@ -10,13 +10,15 @@ public class ProductRepository {
     Map<Integer, Product> productTable = new HashMap<Integer, Product>();
     int id = 0; // DB auto_increment
 
-    public void save(Product product) {
+    public Product save(Product product) {
         product.setId(id++);
         productTable.put(product.getId(), product);
 
         System.out.println(
                 "/proudcts : repository - " + productTable.get(product.getId()).getName()
         );
+
+        return productTable.get(product.getId());
     }
 
     public Product findProduct(int id) {
