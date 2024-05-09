@@ -22,16 +22,13 @@ public class ProductController {
 
         if (Validator.isAlpha(product.getName()) && Validator.isNumber(product.getPrice())) {
 
-            System.out.println(
-                    "/products : controller - " + product.getName()
-            );
+            log.info( "/products : controller - " + product.getName());
 
             Product savedProduct = productService.registerProduct(product);
 
             try {
-                System.out.println(savedProduct.getName());
+                log.info(savedProduct.getName());
             } catch (NullPointerException e) {
-                System.out.println(e.toString());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return new ResponseEntity<>(HttpStatus.CREATED);
