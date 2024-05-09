@@ -2,6 +2,8 @@ package com.example.shoppingmall.product;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductService {
 
@@ -20,5 +22,9 @@ public class ProductService {
 
     public Product findProduct(int id) {
         return productRepository.findProduct(id);
+    }
+
+    public List<Product> findProducts(int limit, int currentPage) {
+        return productRepository.findProducts(limit, currentPage);
     }
 }

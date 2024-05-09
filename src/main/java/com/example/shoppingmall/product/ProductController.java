@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -57,5 +59,22 @@ public class ProductController {
         }
 
         return new ResponseEntity<>(resultProduct, HttpStatus.OK);
+    }
+
+    // 상품 전체, 카테고리별 조회
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> findProducts(
+            @RequestParam("limit") int limit,
+            @RequestParam("currentPage") int currentPage,
+            @RequestParam(value = "categoryId", required = false) Integer categoryId
+    ) {
+        log.info("limit = {}", limit);
+        log.info("currentPage = {}", currentPage);
+        log.info("categoryId = {}", categoryId);
+
+        List<Product> products
+                = productService.findProducts(limit, currentPage);
+
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }
