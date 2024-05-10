@@ -37,7 +37,7 @@ public class ProductService {
         return  productRepository.deleteProduct(id) && productRepository.findProduct(id) == null;
     }
 
-    public boolean deleteProducts(ArrayList<Integer> ids) {
-        return (productRepository.deleteProducts(ids));
+    public void deleteProducts(List<Integer> productIds) {
+       productRepository.deleteProducts(productIds);
     }
 }

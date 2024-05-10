@@ -104,11 +104,16 @@ public class ProductController {
     }
 
     @PostMapping("/products/delete")
-    public ResponseEntity deleteProducts(@RequestBody ProductIds productIds) {
-        boolean isDeleted = productService.deleteProducts(productIds.getProductIds());
-        if (isDeleted)
-            return new ResponseEntity<>(HttpStatus.OK);
-        else
+    public ResponseEntity deleteProducts(@RequestBody Map<String, List<Integer>> deleteRequest) {
+
+        List<Integer> productIds = deleteRequest.get("productIds");
+
+        if (productIds.isEmpty()) {
+            log.info("productIds가 없어..");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        productService.deleteProducts(productIds);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

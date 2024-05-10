@@ -43,16 +43,9 @@ public class ProductRepository {
         return false;
     }
 
-    public boolean deleteProducts(ArrayList<Integer> ids) {
-        for(int id : ids) {
-            if (!productTable.containsKey(id)) {
-                return false;
-            }
+    public void deleteProducts(List<Integer> productIds) {
+        for(int idx = 0; idx < productIds.size(); idx++) {
+            productTable.remove(productIds.get(idx));
         }
-
-        for(int id : ids) {
-            productTable.remove(id);
-        }
-        return true;
     }
 }
