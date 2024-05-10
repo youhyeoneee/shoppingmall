@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -90,12 +91,16 @@ public class ProductController {
     // 상품 1개 삭제
     @DeleteMapping("/products/{id}")
     public ResponseEntity deleteProduct(@PathVariable("id") int id) {
-        log.info("id = {}", id);
-        boolean isDeleted = productService.deleteProduct(id);
-        if (isDeleted)
+        if (!Validator.isNumber(id))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        // TODO 삭제 성공, 실패 판단하려면 필요한 데이터?
+        productService.deleteProduct(id);
+        Product product = productService.findProduct(id);
+        if (product == null)
             return new ResponseEntity<>(HttpStatus.OK);
         else
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping("/products/delete")
