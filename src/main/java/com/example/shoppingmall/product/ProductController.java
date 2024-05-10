@@ -84,4 +84,15 @@ public class ProductController {
 
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
+    // 상품 1개 삭제
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity deleteProduct(@PathVariable("id") int id) {
+        log.info("id = {}", id);
+        boolean isDeleted = productService.deleteProduct(id);
+        if (isDeleted)
+            return new ResponseEntity<>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }

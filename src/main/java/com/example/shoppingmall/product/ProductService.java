@@ -31,4 +31,8 @@ public class ProductService {
     public List<Product> findProducts(int limit, int currentPage, int categoryId) {
         return productRepository.findProducts(limit, currentPage, categoryId);
     }
+
+    public boolean deleteProduct(int id) {
+        return  productRepository.deleteProduct(id) && productRepository.findProduct(id) == null;
+    }
 }

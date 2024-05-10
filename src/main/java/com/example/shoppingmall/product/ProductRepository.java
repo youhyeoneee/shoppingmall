@@ -33,4 +33,12 @@ public class ProductRepository {
     public List<Product> findProducts(int limit, int currentPage, int categoryId) {
         return productTable.values().stream().filter(p -> p.getCategoryId() == categoryId).toList();
     }
+
+    public boolean deleteProduct(int id) {
+        if (productTable.containsKey(id)) {
+            productTable.remove(id);
+            return true;
+        }
+        return false;
+    }
 }
