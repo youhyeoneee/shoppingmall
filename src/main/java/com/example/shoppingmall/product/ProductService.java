@@ -2,6 +2,7 @@ package com.example.shoppingmall.product;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,5 +35,9 @@ public class ProductService {
 
     public boolean deleteProduct(int id) {
         return  productRepository.deleteProduct(id) && productRepository.findProduct(id) == null;
+    }
+
+    public boolean deleteProducts(ArrayList<Integer> ids) {
+        return (productRepository.deleteProducts(ids));
     }
 }

@@ -2,6 +2,7 @@ package com.example.shoppingmall.product;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,5 +41,18 @@ public class ProductRepository {
             return true;
         }
         return false;
+    }
+
+    public boolean deleteProducts(ArrayList<Integer> ids) {
+        for(int id : ids) {
+            if (!productTable.containsKey(id)) {
+                return false;
+            }
+        }
+
+        for(int id : ids) {
+            productTable.remove(id);
+        }
+        return true;
     }
 }

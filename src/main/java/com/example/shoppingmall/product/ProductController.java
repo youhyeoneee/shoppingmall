@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -90,6 +92,15 @@ public class ProductController {
     public ResponseEntity deleteProduct(@PathVariable("id") int id) {
         log.info("id = {}", id);
         boolean isDeleted = productService.deleteProduct(id);
+        if (isDeleted)
+            return new ResponseEntity<>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/products/delete")
+    public ResponseEntity deleteProducts(@RequestBody ProductIds productIds) {
+        boolean isDeleted = productService.deleteProducts(productIds.getProductIds());
         if (isDeleted)
             return new ResponseEntity<>(HttpStatus.OK);
         else
