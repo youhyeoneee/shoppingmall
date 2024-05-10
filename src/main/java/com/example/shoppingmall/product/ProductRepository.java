@@ -27,15 +27,10 @@ public class ProductRepository {
     }
 
     public List<Product> findProducts(int limit, int currentPage) {
-        // Map -> Stream -> List
-        // limit, currentPage => 상품 id 범위
-
-        // limit 4 / currentPage 1 => 0~3
-        // currentPage - 1 = 0 * limit
-        // limit 4 / currentPage 2 => 4~7
-        // currentPage - 1 = 1 * limit
-        // limit 4 / currentPage 3 => 8~11
-        // currentPage - 1 = 2 * limit
         return productTable.values().stream().toList();
+    }
+
+    public List<Product> findProducts(int limit, int currentPage, int categoryId) {
+        return productTable.values().stream().filter(p -> p.getCategoryId() == categoryId).toList();
     }
 }

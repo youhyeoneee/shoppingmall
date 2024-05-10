@@ -69,8 +69,18 @@ public class ProductController {
         log.info("currentPage = {}", currentPage);
         log.info("categoryId = {}", categoryId);
 
-        List<Product> products
-                = productService.findProducts(limit, currentPage);
+        List<Product> products;
+
+        // TODO : null 체크는 어디서 해야할까?
+        if (categoryId == null) {
+            products = productService.findProducts(limit, currentPage);
+        } else {
+            products = productService.findProducts(limit, currentPage, categoryId);
+        }
+
+        if (products == null) {
+            return new ResponseEntity<>(products, HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
