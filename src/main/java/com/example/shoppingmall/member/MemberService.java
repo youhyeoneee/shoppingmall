@@ -12,4 +12,12 @@ public class MemberService {
     public String join(Member member) {
         return memberRepository.save(member);
     }
+
+    public boolean checkDuplicateId(String userId) {
+        Member existedMember = memberRepository.findById(userId);
+
+        if (existedMember == null)
+            return false;
+        return true;
+    }
 }

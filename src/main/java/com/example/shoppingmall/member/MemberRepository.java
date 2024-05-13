@@ -14,4 +14,8 @@ public class MemberRepository {
 
         return member.getUserId();
     }
+
+    public Member findById(String userId) {
+        return memberTable.get(userId);
+    }
 }
