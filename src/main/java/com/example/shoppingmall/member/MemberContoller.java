@@ -13,23 +13,19 @@ public class MemberContoller {
     MemberService memberService;
 
     @PostMapping("/join")
-    public ResponseEntity<String> join(@RequestBody Member member) throws DuplicateException {
+    public ApiResult<String> join(@RequestBody Member member) throws DuplicateException {
         log.info(member.toString());
 
-        // ID 중복 체크
-        // 중복이면, 사용자 예외 클래스 소환
-        //        1) 예외 클래스한테 니가 return해!
-        //        2) 예외만 발생 시키고 .. 메세지는 내가 보낼게
         try {
             if (isDuplicateId(member)) {
                 throw new DuplicateException("중복된 ID 입니다.");
             }
         } catch (DuplicateException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ApiResult<>(false, null, new ApiResult.ApiError("아이디 중복", HttpStatus.CONFLICT));
         }
 
         String userId = memberService.join(member);
-        return new ResponseEntity<String>(userId, HttpStatus.OK);
+        return new ApiResult<>(true, userId, null);
     }
 
     boolean isDuplicateId(Member member) {
