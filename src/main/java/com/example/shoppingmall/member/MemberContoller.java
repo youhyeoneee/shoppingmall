@@ -1,13 +1,13 @@
 package com.example.shoppingmall.member;
 
-import com.example.shoppingmall.utility.ApiUtils;
+import com.example.shoppingmall.utils.ApiUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.shoppingmall.utility.ApiUtils.error;
-import static com.example.shoppingmall.utility.ApiUtils.success;
+import static com.example.shoppingmall.utils.ApiUtils.error;
+import static com.example.shoppingmall.utils.ApiUtils.success;
 
 @Slf4j
 @AllArgsConstructor

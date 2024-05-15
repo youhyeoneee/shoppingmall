@@ -1,4 +1,4 @@
-package com.example.shoppingmall.utility;
+package com.example.shoppingmall.utils;
 
 import org.springframework.stereotype.Component;
 

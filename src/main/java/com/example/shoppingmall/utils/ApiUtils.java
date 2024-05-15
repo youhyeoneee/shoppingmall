@@ -1,4 +1,4 @@
-package com.example.shoppingmall.utility;
+package com.example.shoppingmall.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

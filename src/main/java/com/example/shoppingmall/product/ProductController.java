@@ -1,14 +1,12 @@
 package com.example.shoppingmall.product;
 
-import com.example.shoppingmall.utility.Validator;
+import com.example.shoppingmall.utils.Validator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
