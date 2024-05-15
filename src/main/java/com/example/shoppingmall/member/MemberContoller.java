@@ -1,10 +1,13 @@
 package com.example.shoppingmall.member;
 
+import com.example.shoppingmall.utility.ApiUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.example.shoppingmall.utility.ApiUtils.error;
+import static com.example.shoppingmall.utility.ApiUtils.success;
 
 @Slf4j
 @AllArgsConstructor
@@ -13,7 +16,7 @@ public class MemberContoller {
     MemberService memberService;
 
     @PostMapping("/join")
-    public ApiResult<String> join(@RequestBody Member member) throws DuplicateException {
+    public ApiUtils.ApiResult<String> join(@RequestBody Member member) throws DuplicateException {
         log.info(member.toString());
 
         try {
@@ -21,11 +24,11 @@ public class MemberContoller {
                 throw new DuplicateException("중복된 ID 입니다.");
             }
         } catch (DuplicateException e) {
-            return new ApiResult<>(false, null, new ApiResult.ApiError("아이디 중복", HttpStatus.CONFLICT));
+            return error("아이디 중복", HttpStatus.CONFLICT);
         }
 
         String userId = memberService.join(member);
-        return new ApiResult<>(true, userId, null);
+        return success(userId);
     }
 
     boolean isDuplicateId(Member member) {
