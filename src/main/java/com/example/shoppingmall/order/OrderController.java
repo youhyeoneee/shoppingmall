@@ -1,5 +1,7 @@
 package com.example.shoppingmall.order;
 
+import com.example.shoppingmall.product.Product;
+import com.example.shoppingmall.product.ProductService;
 import com.example.shoppingmall.utils.Validator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,17 +15,14 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     OrderService orderService;
+    ProductService productService;
 
     @PostMapping("/orders")
-    public ResponseEntity registerOrder(@RequestBody Order order) {
-        if (!Validator.isNumber(order.getQuantity()) || order.getProductName() == null || order.getProductName().isEmpty())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-        Order savedOrder = orderService.registerOrder(order);
-
-        if (savedOrder == null) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity orderProduct(@RequestBody OrderDTO orderDTO) {
+        Product orderedProduct = productService.findProduct(orderDTO.getProductId());
+        // TODO : Service로 옮기기 (DTO -> Entity)
+        Order   = new Order(orderedProduct, orderDTO.getCount());
+//
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 
