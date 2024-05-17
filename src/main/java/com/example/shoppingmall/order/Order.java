@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class Order {
     int id;
     Product product;

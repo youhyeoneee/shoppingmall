@@ -18,11 +18,11 @@ public class OrderController {
     ProductService productService;
 
     @PostMapping("/orders")
-    public ResponseEntity orderProduct(@RequestBody OrderDTO orderDTO) {
-        Product orderedProduct = productService.findProduct(orderDTO.getProductId());
+    public ResponseEntity orderProduct(@RequestBody OrderDTO orderDto) {
+        Product orderedProduct = productService.findProduct(orderDto.getProductId());
         // TODO : Service로 옮기기 (DTO -> Entity)
-        Order   = new Order(orderedProduct, orderDTO.getCount());
-//
+        Order requestOrder = new Order(orderedProduct, orderDto.getCount());
+        orderService.orderProduct(requestOrder);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 

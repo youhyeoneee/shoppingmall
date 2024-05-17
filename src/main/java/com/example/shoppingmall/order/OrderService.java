@@ -11,14 +11,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderService {
     OrderRepository orderRepository;
-    ProductRepository productRepository;
 
-    public Order orderProduct(OrderDTO orderDTO) {
-
-
-        Product product = productRepository.findProduct(orderDTO.getProductId());
-        Order order = new Order(product, orderDTO.getCount());
-
+    public Order orderProduct(Order order) {
         return orderRepository.save(order);
     }
 

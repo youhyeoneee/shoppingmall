@@ -9,8 +9,8 @@ import java.util.Map;
 @Slf4j
 @Repository
 public class OrderRepository {
-    Map<Integer, Order> orderTable = new HashMap<Integer, Order>();
-    int id = 0;
+    private Map<Integer, Order> orderTable = new HashMap<Integer, Order>();
+    private int id = 0;
 
     public Order save(Order order) {
         log.info("order product name : " + order.getProduct().getName());
