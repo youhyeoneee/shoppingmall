@@ -16,22 +16,17 @@ public class MemberContoller {
     MemberService memberService;
 
     @PostMapping("/join")
-    public ApiUtils.ApiResult<String> join(@RequestBody Member member) throws DuplicateException {
-        log.info(member.toString());
-
-        try {
-            if (isDuplicateId(member)) {
-                throw new DuplicateException("중복된 ID 입니다.");
-            }
-        } catch (DuplicateException e) {
+    public ApiUtils.ApiResult<String> join(@RequestBody MemberDTO memberDto) throws DuplicateException {
+        if (isDuplicateId(memberDto)) {
             return error("아이디 중복", HttpStatus.CONFLICT);
         }
 
-        String userId = memberService.join(member);
+        Member requestMember = memberDto.convertToEntity();
+        String userId = memberService.join(requestMember);
         return success(userId);
     }
 
-    boolean isDuplicateId(Member member) {
-        return memberService.checkDuplicateId(member.getUserId());
+    boolean isDuplicateId(MemberDTO memberDto) {
+        return memberService.checkDuplicateId(memberDto.getUserId());
     }
 }
