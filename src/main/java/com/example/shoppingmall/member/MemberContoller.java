@@ -22,15 +22,16 @@ public class MemberContoller {
     MemberService memberService;
 
     @PostMapping("/join")
-    public ApiUtils.ApiResult<String> join(@Valid @RequestBody MemberDTO memberDto, Errors errors) {
+    public ApiUtils.ApiResult join(@Valid @RequestBody MemberDTO memberDto, Errors errors) {
         if (errors.hasErrors()) {
             String result = "[유효성 검사 실패]";
-            Map<String, String> validatorResult = new HashMap<>();
+            Map<String, String> errorMessages = new HashMap<>();
             for (FieldError error : errors.getFieldErrors()) {
-                String validKeyName = error.getField();
-                validatorResult.put(validKeyName, error.getDefaultMessage());
+                String errorField = error.getField();
+                String errorMessage = error.getDefaultMessage();
+                errorMessages.put(errorField, errorMessage);
             }
-            return error(result + validatorResult, HttpStatus.BAD_REQUEST);
+            return error(errorMessages, HttpStatus.BAD_REQUEST);
         }
 
         if (isDuplicateId(memberDto)) {
