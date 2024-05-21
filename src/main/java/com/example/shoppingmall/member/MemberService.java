@@ -20,4 +20,8 @@ public class MemberService {
             return false;
         return true;
     }
+
+    public void makeConnection() {
+        memberRepository.makeConnection();
+    }
 }
