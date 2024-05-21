@@ -17,7 +17,7 @@ public class MemberDTO {
     @NotBlank(message = "아이디를 입력해주세요.")
     private String userId;
 
-    @Pattern(regexp = "\t^.*(?=^.{8,15}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$", message = "숫자, 문자, 특수문자 포함 8~15자리 이내여야 합니다.")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$", message = "숫자, 문자, 특수문자 포함 8~15자리 이내여야 합니다.")
     private String pw;
 
     @NotBlank(message = "이름을 입력해주세요.")
