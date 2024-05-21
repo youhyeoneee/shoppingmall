@@ -1,15 +1,17 @@
 package com.example.shoppingmall.member;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@Transactional
 @Service
 @AllArgsConstructor
 public class MemberService {
 
     MemberRepository memberRepository;
 
-    public String join(Member member) {
+    public Member join(Member member) {
         return memberRepository.save(member);
     }
 
@@ -21,7 +23,4 @@ public class MemberService {
         return true;
     }
 
-    public void makeConnection() {
-        memberRepository.makeConnection();
-    }
 }

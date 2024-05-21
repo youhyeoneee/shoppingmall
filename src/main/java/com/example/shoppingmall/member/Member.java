@@ -1,14 +1,14 @@
 package com.example.shoppingmall.member;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
 @Getter
-@Setter
 public class Member {
+    @Id
     private int id; // PK
     private String userId;
     private String pw;

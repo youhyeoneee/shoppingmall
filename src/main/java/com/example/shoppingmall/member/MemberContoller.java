@@ -22,11 +22,6 @@ import static com.example.shoppingmall.utils.ApiUtils.success;
 public class MemberContoller {
     MemberService memberService;
 
-    @GetMapping("/test")
-    public void makeConnection() {
-        memberService.makeConnection();
-    }
-
     @PostMapping("/join")
     public ApiUtils.ApiResult join(@Valid @RequestBody MemberDTO memberDto) {
         if (isDuplicateId(memberDto)) {
@@ -34,8 +29,8 @@ public class MemberContoller {
         }
 
         Member requestMember = memberDto.convertToEntity();
-        String userId = memberService.join(requestMember);
-        return success(userId);
+        Member savedMember = memberService.join(requestMember);
+        return success(savedMember);
     }
 
     boolean isDuplicateId(MemberDTO memberDto) {

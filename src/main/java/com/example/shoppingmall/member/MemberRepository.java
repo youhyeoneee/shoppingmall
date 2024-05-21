@@ -1,10 +1,10 @@
 package com.example.shoppingmall.member;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,17 +12,16 @@ import java.util.Map;
 public class MemberRepository {
 
     @Autowired
-    DataSource dataSource;
+    @PersistenceContext
+    EntityManager entityManager;
+
     Map<String, Member> memberTable = new HashMap<>();
 
-    public void makeConnection() {
-        DataSourceUtils.getConnection(dataSource);
-    }
 
-    public String save(Member member) {
-        memberTable.put(member.getUserId(), member);
-
-        return member.getUserId();
+    public Member save(Member member) {
+        entityManager.persist(member);
+        Member savedMember = entityManager.find(Member.class, member.getId());
+        return savedMember;
     }
 
     public Member findById(String userId) {
