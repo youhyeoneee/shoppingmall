@@ -3,10 +3,12 @@ package com.example.shoppingmall.member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Member {
     @Id
     private int id; // PK

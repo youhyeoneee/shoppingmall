@@ -5,12 +5,8 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.example.shoppingmall.utils.ApiUtils.error;
@@ -29,11 +25,24 @@ public class MemberContoller {
         }
 
         Member requestMember = memberDto.convertToEntity();
-        Member savedMember = memberService.join(requestMember);
-        return success(savedMember);
+        String result = memberService.join(requestMember);
+        return success(result);
     }
 
     boolean isDuplicateId(MemberDTO memberDto) {
         return memberService.checkDuplicateId(memberDto.getUserId());
+    }
+
+    @PostMapping("/login")
+    public ApiUtils.ApiResult login(@RequestBody Map<String, String> requestBody) {
+        String userId = requestBody.get("user_id");
+        String password = requestBody.get("pw");
+
+        Member loginUser = memberService.login(userId, password);
+        if (loginUser == null) {
+            return error("로그인 실패", HttpStatus.BAD_REQUEST);
+        }
+
+        return success(loginUser.getUserId() + "님 어서오세요");
     }
 }
