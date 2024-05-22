@@ -38,11 +38,11 @@ public class MemberContoller {
         String userId = requestBody.get("user_id");
         String password = requestBody.get("pw");
 
-        Member loginUser = memberService.login(userId, password);
+        String loginUser = memberService.login(userId, password);
         if (loginUser == null) {
             return error("로그인 실패", HttpStatus.BAD_REQUEST);
         }
 
-        return success(loginUser.getUserId() + "님 어서오세요");
+        return success(loginUser + "님 어서오세요");
     }
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -15,22 +16,24 @@ public class MemberService {
     @Transactional
     public String join(Member member) {
         memberRepository.save(member);
-
-        return memberRepository.findByUserId(member.getUserId()).getUserId();
+        Optional<Member> resultMember = memberRepository.findByUserId(member.getUserId());
+        if (resultMember.isEmpty())
+            return "실패";
+        return resultMember.get().getUserId();
     }
 
     public boolean checkDuplicateId(String userId) {
-        Member existedMember = memberRepository.findByUserId(userId);
+        Optional<Member> existedMember = memberRepository.findByUserId(userId);
 
-        if (existedMember == null)
+        if (existedMember.isEmpty())
             return false;
         return true;
     }
 
-    public Member login(String userId, String password) {
-        List<Member> member = memberRepository.findsByUserIdPw(userId, password);
-        if (member.isEmpty())
+    public String login(String userId, String password) {
+        Optional<Member> resultMember = memberRepository.findByUserIdAndPw(userId, password);
+        if (resultMember.isEmpty())
             return null;
-        return member.get(0);
+        return resultMember.get().getUserId();
     }
 }
