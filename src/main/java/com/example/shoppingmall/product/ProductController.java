@@ -1,5 +1,6 @@
 package com.example.shoppingmall.product;
 
+import com.example.shoppingmall.utils.ApiUtils;
 import com.example.shoppingmall.utils.Validator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 
 @Slf4j
@@ -19,7 +19,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("/products")
-    public ResponseEntity registerProduct(@RequestBody Product product) {
+    public ApiUtils.ApiResult registerProduct(@RequestBody Product product) {
 
         if (Validator.isAlpha(product.getName()) && Validator.isNumber(product.getPrice())) {
 
@@ -30,34 +30,34 @@ public class ProductController {
             try {
                 log.info(savedProduct.getName());
             } catch (NullPointerException e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return ApiUtils.error("상품 등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return ApiUtils.success(product); // TODO: HTTP Status Code CREATED 적용
         } else
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ApiUtils.error("상품 등록 실패", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/products/{id}")
-    public ResponseEntity<Product> findProduct(@PathVariable("id") int id) {
+    public ApiUtils.ApiResult findProduct(@PathVariable("id") int id) {
 
         if (!Validator.isNumber(id)) {
             // TODO log INFO 레벨 id type
             log.info(id + " haha");
             log.trace("id {}", "haha");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ApiUtils.error("상품 조회 실패", HttpStatus.BAD_REQUEST);
         }
 
         Product resultProduct =  productService.findProduct(id);
 
         if (resultProduct == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ApiUtils.error("상품이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(resultProduct, HttpStatus.OK);
+        return ApiUtils.success(resultProduct);
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> findProducts(
+    public ApiUtils.ApiResult findProducts(
             @RequestParam("limit") int limit,
             @RequestParam(value = "categoryId", required = false) Integer categoryId
     ) {
@@ -74,9 +74,9 @@ public class ProductController {
         }
 
         if (products == null) {
-            return new ResponseEntity<>(products, HttpStatus.NOT_FOUND);
+            return ApiUtils.error("상품이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        return ApiUtils.success(products);
     }
 }
