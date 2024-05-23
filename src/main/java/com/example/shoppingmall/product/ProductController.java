@@ -22,9 +22,10 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("/products")
-    public ApiUtils.ApiResult registerProduct(@Valid @RequestBody Product product) {
-        log.info( "/products : controller - " + product.getName());
+    public ApiUtils.ApiResult registerProduct(@Valid @RequestBody ProductDTO productDto) {
+        log.info( "/products : controller - " + productDto.getName());
 
+        Product product = productDto.convertToEntity();
         Product savedProduct = productService.registerProduct(product);
 
         try {
@@ -32,7 +33,7 @@ public class ProductController {
         } catch (NullPointerException e) {
             return ApiUtils.error("상품 등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ApiUtils.success(product); // TODO: HTTP Status Code CREATED 적용
+        return ApiUtils.success(productDto); // TODO: HTTP Status Code CREATED 적용
     }
 
     @GetMapping("/products/{id}")
