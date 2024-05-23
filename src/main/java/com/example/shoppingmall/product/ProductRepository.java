@@ -1,30 +1,28 @@
 package com.example.shoppingmall.product;
 
+import jakarta.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Repository
 public class ProductRepository {
+
+    @Autowired
+    EntityManager entityManager;
+
     Map<Integer, Product> productTable = new HashMap<Integer, Product>();
     int id = 0; // DB auto_increment
 
-    public Product save(Product product) {
-        product.setId(id++);
-        productTable.put(product.getId(), product);
-
-        System.out.println(
-                "/proudcts : repository - " + productTable.get(product.getId()).getName()
-        );
-
-        return productTable.get(product.getId());
+    public void save(Product product) {
+        entityManager.persist(product);
     }
 
-    public Product findProduct(int id) {
-        return productTable.get(id);
+    public Product findProductById(int id) {
+        return entityManager.find(Product.class, id);
     }
 
     public List<Product> findProducts(int limit, int currentPage) {

@@ -1,8 +1,8 @@
 package com.example.shoppingmall.product;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,15 +14,15 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     public Product registerProduct(Product product) {
-        System.out.println(
-                "/products : service - " + product.getName()
-        );
-        return productRepository.save(product);
+        productRepository.save(product);
+
+        return productRepository.findProductById(product.getId());
     }
 
     public Product findProduct(int id) {
-        return productRepository.findProduct(id);
+        return productRepository.findProductById(id);
     }
 
     public List<Product> findProducts(int limit, int currentPage) {
@@ -34,7 +34,7 @@ public class ProductService {
     }
 
     public boolean deleteProduct(int id) {
-        return  productRepository.deleteProduct(id) && productRepository.findProduct(id) == null;
+        return  productRepository.deleteProduct(id) && productRepository.findProductById(id) == null;
     }
 
     public void deleteProducts(List<Integer> productIds) {
