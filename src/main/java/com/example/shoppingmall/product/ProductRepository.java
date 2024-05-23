@@ -14,9 +14,6 @@ public class ProductRepository {
     @Autowired
     EntityManager entityManager;
 
-    Map<Integer, Product> productTable = new HashMap<Integer, Product>();
-    int id = 0; // DB auto_increment
-
     public void save(Product product) {
         entityManager.persist(product);
     }
@@ -25,25 +22,16 @@ public class ProductRepository {
         return entityManager.find(Product.class, id);
     }
 
-    public List<Product> findProducts(int limit, int currentPage) {
-        return productTable.values().stream().toList();
+    public List<Product> findProducts(int limit) {
+        String jpql = "SELECT p FROM Product AS p";
+
+        return entityManager.createQuery(jpql, Product.class).setMaxResults(limit).getResultList();
     }
 
-    public List<Product> findProducts(int limit, int currentPage, int categoryId) {
-        return productTable.values().stream().filter(p -> p.getCategoryId() == categoryId).toList();
-    }
+    public List<Product> findProducts(int limit, int categoryId) {
+            String jpql = "SELECT p FROM Product AS p WHERE categoryId = :categoryId";
 
-    public boolean deleteProduct(int id) {
-        if (productTable.containsKey(id)) {
-            productTable.remove(id);
-            return true;
-        }
-        return false;
-    }
-
-    public void deleteProducts(List<Integer> productIds) {
-        for(int idx = 0; idx < productIds.size(); idx++) {
-            productTable.remove(productIds.get(idx));
-        }
+            return entityManager.createQuery(jpql, Product.class)
+                    .setParameter("categoryId", categoryId).setMaxResults(limit).getResultList();
     }
 }
