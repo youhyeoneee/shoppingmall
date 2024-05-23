@@ -25,19 +25,12 @@ public class ProductService {
         return productRepository.findProductById(id);
     }
 
-    public List<Product> findProducts(int limit, int currentPage) {
-        return productRepository.findProducts(limit, currentPage);
+    public List<Product> findProducts(int limit) {
+        return productRepository.findProducts(limit);
     }
 
-    public List<Product> findProducts(int limit, int currentPage, int categoryId) {
-        return productRepository.findProducts(limit, currentPage, categoryId);
+    public List<Product> findProducts(int limit, int categoryId) {
+        return productRepository.findProducts(limit, categoryId);
     }
 
-    public boolean deleteProduct(int id) {
-        return  productRepository.deleteProduct(id) && productRepository.findProductById(id) == null;
-    }
-
-    public void deleteProducts(List<Integer> productIds) {
-       productRepository.deleteProducts(productIds);
-    }
 }

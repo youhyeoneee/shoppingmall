@@ -39,10 +39,7 @@ public class ProductController {
 
     @GetMapping("/products/{id}")
     public ResponseEntity<Product> findProduct(@PathVariable("id") int id) {
-        // 1. Product 반환 필드 : id가 없어요
-        // 2. id 숫자만 들어온 거 맞는지 유효성 검사
 
-//        Logger logger = (Logger) LoggerFactory.getLogger(ProductController.class);
         if (!Validator.isNumber(id)) {
             // TODO log INFO 레벨 id type
             log.info(id + " haha");
@@ -59,24 +56,21 @@ public class ProductController {
         return new ResponseEntity<>(resultProduct, HttpStatus.OK);
     }
 
-    // 상품 전체, 카테고리별 조회
     @GetMapping("/products")
     public ResponseEntity<List<Product>> findProducts(
             @RequestParam("limit") int limit,
-            @RequestParam("currentPage") int currentPage,
             @RequestParam(value = "categoryId", required = false) Integer categoryId
     ) {
         log.info("limit = {}", limit);
-        log.info("currentPage = {}", currentPage);
         log.info("categoryId = {}", categoryId);
 
         List<Product> products;
 
         // TODO : null 체크는 어디서 해야할까?
         if (categoryId == null) {
-            products = productService.findProducts(limit, currentPage);
+            products = productService.findProducts(limit);
         } else {
-            products = productService.findProducts(limit, currentPage, categoryId);
+            products = productService.findProducts(limit, categoryId);
         }
 
         if (products == null) {
@@ -84,34 +78,5 @@ public class ProductController {
         }
 
         return new ResponseEntity<>(products, HttpStatus.OK);
-    }
-
-    // 상품 1개 삭제
-    @DeleteMapping("/products/{id}")
-    public ResponseEntity deleteProduct(@PathVariable("id") int id) {
-        if (!Validator.isNumber(id))
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-        // TODO 삭제 성공, 실패 판단하려면 필요한 데이터?
-        productService.deleteProduct(id);
-        Product product = productService.findProduct(id);
-        if (product == null)
-            return new ResponseEntity<>(HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @PostMapping("/products/delete")
-    public ResponseEntity deleteProducts(@RequestBody Map<String, List<Integer>> deleteRequest) {
-
-        List<Integer> productIds = deleteRequest.get("productIds");
-
-        if (productIds.isEmpty()) {
-            log.info("productIds가 없어..");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        productService.deleteProducts(productIds);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
