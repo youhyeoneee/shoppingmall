@@ -2,10 +2,10 @@ package com.example.shoppingmall.product;
 
 import com.example.shoppingmall.utils.ApiUtils;
 import com.example.shoppingmall.utils.Validator;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,22 +19,17 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("/products")
-    public ApiUtils.ApiResult registerProduct(@RequestBody Product product) {
+    public ApiUtils.ApiResult registerProduct(@Valid @RequestBody Product product) {
+        log.info( "/products : controller - " + product.getName());
 
-        if (Validator.isAlpha(product.getName()) && Validator.isNumber(product.getPrice())) {
+        Product savedProduct = productService.registerProduct(product);
 
-            log.info( "/products : controller - " + product.getName());
-
-            Product savedProduct = productService.registerProduct(product);
-
-            try {
-                log.info(savedProduct.getName());
-            } catch (NullPointerException e) {
-                return ApiUtils.error("상품 등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            return ApiUtils.success(product); // TODO: HTTP Status Code CREATED 적용
-        } else
-            return ApiUtils.error("상품 등록 실패", HttpStatus.BAD_REQUEST);
+        try {
+            log.info(savedProduct.getName());
+        } catch (NullPointerException e) {
+            return ApiUtils.error("상품 등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ApiUtils.success(product); // TODO: HTTP Status Code CREATED 적용
     }
 
     @GetMapping("/products/{id}")
