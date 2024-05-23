@@ -1,37 +1,23 @@
 package com.example.shoppingmall.product;
 
-import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Limit;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Repository
-public class ProductRepository {
+public interface ProductRepository extends CrudRepository<Product, Integer> {
 
-    @Autowired
-    EntityManager entityManager;
+    <S extends Product> S save(S entity);
 
-    public void save(Product product) {
-        entityManager.persist(product);
-    }
+    Optional<Product> findById(Integer id);
 
-    public Product findProductById(int id) {
-        return entityManager.find(Product.class, id);
-    }
+    // TODO : Limit 적용
 
-    public List<Product> findProducts(int limit) {
-        String jpql = "SELECT p FROM Product AS p";
+    List<Product> findAll();
 
-        return entityManager.createQuery(jpql, Product.class).setMaxResults(limit).getResultList();
-    }
-
-    public List<Product> findProducts(int limit, int categoryId) {
-            String jpql = "SELECT p FROM Product AS p WHERE categoryId = :categoryId";
-
-            return entityManager.createQuery(jpql, Product.class)
-                    .setParameter("categoryId", categoryId).setMaxResults(limit).getResultList();
-    }
+    List<Product> findAllByCategoryId(int categoryId);
 }

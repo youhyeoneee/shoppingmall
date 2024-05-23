@@ -1,6 +1,8 @@
 package com.example.shoppingmall.product;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,19 +20,19 @@ public class ProductService {
     public Product registerProduct(Product product) {
         productRepository.save(product);
 
-        return productRepository.findProductById(product.getId());
+        return productRepository.findById(product.getId()).get();
     }
 
     public Product findProduct(int id) {
-        return productRepository.findProductById(id);
+        return productRepository.findById(id).get();
     }
 
     public List<Product> findProducts(int limit) {
-        return productRepository.findProducts(limit);
+        return productRepository.findAll();
     }
 
     public List<Product> findProducts(int limit, int categoryId) {
-        return productRepository.findProducts(limit, categoryId);
+        return productRepository.findAllByCategoryId(categoryId);
     }
 
 }
