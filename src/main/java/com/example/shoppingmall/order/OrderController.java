@@ -21,26 +21,26 @@ public class OrderController {
     public ResponseEntity orderProduct(@RequestBody OrderDTO orderDto) {
         Product orderedProduct = productService.findProduct(orderDto.getProductId());
         // TODO : Service로 옮기기 (DTO -> Entity)
-        Order requestOrder = new Order(orderedProduct, orderDto.getCount());
-        orderService.orderProduct(requestOrder);
+        Orders requestOrders = new Orders(orderedProduct, orderDto.getCount());
+        orderService.orderProduct(requestOrders);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 
     @GetMapping("/orders/{id}")
-    public ResponseEntity<Order> findOrder(@PathVariable("id") int id) {
+    public ResponseEntity<Orders> findOrder(@PathVariable("id") int id) {
         if (!Validator.isNumber(id)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Order resultOrder = orderService.findOrder(id);
+        Orders resultOrders = orderService.findOrder(id);
 
-        if (resultOrder == null) {
+        if (resultOrders == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(resultOrder, HttpStatus.OK);
+        return new ResponseEntity<>(resultOrders, HttpStatus.OK);
     }
 
 }

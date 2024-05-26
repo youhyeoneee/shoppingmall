@@ -1,22 +1,22 @@
 package com.example.shoppingmall.order;
 
-import com.example.shoppingmall.product.Product;
-import com.example.shoppingmall.product.ProductRepository;
-import com.example.shoppingmall.product.ProductService;
 import lombok.AllArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
 public class OrderService {
     OrderRepository orderRepository;
 
-    public Order orderProduct(Order order) {
-        return orderRepository.save(order);
+    public Orders orderProduct(Orders orders) {
+        return orderRepository.save(orders);
     }
 
-    public Order findOrder(int id) {
-        return orderRepository.findOrder(id);
+    public Orders findOrder(int id) {
+        Optional<Orders> orders = orderRepository.findById(id);;
+
+        return orders.orElse(null);
     }
 }
