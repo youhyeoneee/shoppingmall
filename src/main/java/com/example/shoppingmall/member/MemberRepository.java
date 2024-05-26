@@ -9,10 +9,6 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends CrudRepository<Member, Integer> {
 
-    <S extends Member> S save(S entity);
-
-    Optional<Member> findById(Integer id);
-
     Optional<Member> findByUserId(String userId);
 
     Optional<Member> findByUserIdAndPw(String userId, String pw);

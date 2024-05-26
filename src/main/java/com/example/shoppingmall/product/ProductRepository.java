@@ -11,13 +11,7 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Integer> {
 
-    <S extends Product> S save(S entity);
-
-    Optional<Product> findById(Integer id);
-
     // TODO : Limit 적용
-
     List<Product> findAll();
-
     List<Product> findAllByCategoryId(int categoryId);
 }
