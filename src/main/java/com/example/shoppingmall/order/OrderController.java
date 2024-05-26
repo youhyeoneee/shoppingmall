@@ -4,6 +4,7 @@ import com.example.shoppingmall.product.Product;
 import com.example.shoppingmall.product.ProductService;
 import com.example.shoppingmall.utils.ApiUtils;
 import com.example.shoppingmall.utils.Validator;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class OrderController {
     ProductService productService;
 
     @PostMapping("/orders")
-    public ApiUtils.ApiResult orderProduct(@RequestBody OrderDTO orderDto) {
+    public ApiUtils.ApiResult orderProduct(@Valid @RequestBody OrderDTO orderDto) {
         Product orderedProduct = productService.findProduct(orderDto.getProductId());
         // TODO : Service로 옮기기 (DTO -> Entity)
 
