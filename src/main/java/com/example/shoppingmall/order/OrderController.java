@@ -22,13 +22,12 @@ public class OrderController {
     @PostMapping("/orders")
     public ApiUtils.ApiResult orderProduct(@Valid @RequestBody OrderDTO orderDto) {
         Product orderedProduct = productService.findProduct(orderDto.getProductId());
-        // TODO : Service로 옮기기 (DTO -> Entity)
 
         if (orderedProduct == null) {
             return ApiUtils.error("상품이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
 
-        Orders requestOrders = new Orders(orderedProduct, orderDto.getCount());
+        Orders requestOrders = orderDto.convertToEntity(orderedProduct);
         Orders resultOrders = orderService.orderProduct(requestOrders);
 
         if (resultOrders == null)
