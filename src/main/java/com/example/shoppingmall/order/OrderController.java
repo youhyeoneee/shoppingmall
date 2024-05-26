@@ -2,6 +2,7 @@ package com.example.shoppingmall.order;
 
 import com.example.shoppingmall.product.Product;
 import com.example.shoppingmall.product.ProductService;
+import com.example.shoppingmall.utils.ApiUtils;
 import com.example.shoppingmall.utils.Validator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,29 +19,37 @@ public class OrderController {
     ProductService productService;
 
     @PostMapping("/orders")
-    public ResponseEntity orderProduct(@RequestBody OrderDTO orderDto) {
+    public ApiUtils.ApiResult orderProduct(@RequestBody OrderDTO orderDto) {
         Product orderedProduct = productService.findProduct(orderDto.getProductId());
         // TODO : Service로 옮기기 (DTO -> Entity)
-        Orders requestOrders = new Orders(orderedProduct, orderDto.getCount());
-        orderService.orderProduct(requestOrders);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        if (orderedProduct == null) {
+            return ApiUtils.error("상품이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+        }
+
+        Orders requestOrders = new Orders(orderedProduct, orderDto.getCount());
+        Orders resultOrders = orderService.orderProduct(requestOrders);
+
+        if (resultOrders == null)
+            return ApiUtils.error("주문 등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return ApiUtils.success(orderDto); // TODO: HTTP Status Code CREATED 적용
 
     }
 
     @GetMapping("/orders/{id}")
-    public ResponseEntity<Orders> findOrder(@PathVariable("id") int id) {
+    public ApiUtils.ApiResult findOrder(@PathVariable("id") int id) {
         if (!Validator.isNumber(id)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ApiUtils.error("주문 조회 실패", HttpStatus.BAD_REQUEST);
         }
 
         Orders resultOrders = orderService.findOrder(id);
 
         if (resultOrders == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ApiUtils.error("주문이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(resultOrders, HttpStatus.OK);
+        return ApiUtils.success(resultOrders);
     }
 
 }
