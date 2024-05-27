@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,12 +13,10 @@ public class MemberService {
     MemberRepository memberRepository;
 
     @Transactional
-    public String join(Member member) {
-        memberRepository.save(member);
-        Optional<Member> resultMember = memberRepository.findByUserId(member.getUserId());
-        if (resultMember.isEmpty())
-            return "실패";
-        return resultMember.get().getUserId();
+    public String join(MemberDTO memberDto) {
+        Member requestMember = memberDto.convertToEntity();
+        Member joinedMember = memberRepository.save(requestMember);
+        return joinedMember.getUserId();
     }
 
     public boolean checkDuplicateId(String userId) {
