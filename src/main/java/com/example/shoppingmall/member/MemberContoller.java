@@ -19,18 +19,21 @@ public class MemberContoller {
     MemberService memberService;
 
     @PostMapping("/join")
-    public ApiUtils.ApiResult join(@Valid @RequestBody MemberDTO memberDto) {
-        if (isDuplicateId(memberDto)) {
-            return error("아이디 중복", HttpStatus.CONFLICT);
-        }
-
-        Member requestMember = memberDto.convertToEntity();
-        String result = memberService.join(requestMember);
+    public ApiUtils.ApiResult<String> join(@Valid @RequestBody MemberDTO memberDto) {
+        String result = memberService.join(memberDto);
         return success(result);
     }
 
-    boolean isDuplicateId(MemberDTO memberDto) {
-        return memberService.checkDuplicateId(memberDto.getUserId());
+    @PostMapping("/check-id")
+    public ApiUtils.ApiResult<String> checkUsableId(@RequestBody String userId) {
+        if (isDuplicateId(userId))
+            throw new DuplicateMemberIdException("이미 존재하는 아이디입니다.");
+        return success("사용 가능한 아이디입니다.");
+    }
+
+    boolean isDuplicateId(String userId) {
+        log.info(userId);
+        return memberService.checkDuplicateId(userId);
     }
 
     @PostMapping("/login")

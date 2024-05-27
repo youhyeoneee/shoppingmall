@@ -2,10 +2,12 @@ package com.example.shoppingmall.member;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class MemberService {
@@ -22,9 +24,12 @@ public class MemberService {
     public boolean checkDuplicateId(String userId) {
         Optional<Member> existedMember = memberRepository.findByUserId(userId);
 
-        if (existedMember.isEmpty())
+        if (existedMember.isPresent()) {
+            log.info(existedMember.get().getUserId());
+            return true;
+        }
+        else
             return false;
-        return true;
     }
 
     public String login(String userId, String password) {
